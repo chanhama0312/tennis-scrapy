@@ -1,0 +1,37 @@
+{
+  "family": "tennisc_ecs_task",
+  "taskRoleArn": "arn:aws:iam::209804001069:role/yhamano1-ecs-task-role",
+  "executionRoleArn": "arn:aws:iam::209804001069:role/yhamano1-ecs-role",
+  "containerDefinitions": [
+    {
+      "name": "tennisc_scraping",
+      "image": "209804001069.dkr.ecr.ap-northeast-1.amazonaws.com/tennisc/scraping:latest",
+      "cpu": 1,
+      "memory": 512,
+      "essential": true,
+      "privileged": true,
+      "secrets": [
+        {
+            "valueFrom": "tennisc_db_hostname",
+            "name": "DB_HOSTNAME"
+        },
+        {
+            "valueFrom": "tennisc_db_name",
+            "name": "DB_NAME"
+        },
+        {
+            "valueFrom": "tennisc_db_user_name",
+            "name": "DB_USER_NAME"
+        },
+        {
+            "valueFrom": "tennisc_db_user_password",
+            "name": "DB_USER_PASSWORD"
+        },
+        {
+            "valueFrom": "tennisc_slack_webhook_toei",
+            "name": "SLACK_WEBHOOK_TOEI"
+        }
+      ]
+    }
+  ]
+}

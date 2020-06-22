@@ -1,0 +1,37 @@
+#作業メモ
+- dockerファイルを指定してのビルド(COPYコマンドでファイルをイメージに含める場合はディレクトに移動してから)
+  - docker build -t tennisc/scraping:latest -f dockerfile/scraping_dockerfile .
+- chromeを実行するためのrunコマンド
+  - docker run --privileged -e DB_HOSTNAME=tennisc-db-server.cvfvzkzn4zd8.ap-northeast-1.rds.amazonaws.com -e DB_NAME=tennisc -e DB_USER_NAME=tennisc_postgres -e DB_USER_PASSWORD=eWYarUqe24G4 -e SLACK_WEBHOOK_TOEI=https://hooks.slack.com/services/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 -it tennisc/scraping /bin/bash
+- docker runする時のマウント
+  - docker run -v /c/tennisc:/home -it tennisc/scraping /bin/bash
+
+- privilegedを有効化するためのECSタスク定義作成
+ - aws ecs register-task-definition --cli-input-json file://task_definition.json --region ap-northeast-1
+
+#scrapy実行
+cd home/scrapy/tennisc/tennisc/spiders/
+scrapy runspider toei_spider.py --loglevel=WARN
+
+cd home/scrapy/tennisc/tennisc/spiders/
+scrapy runspider test_spider.py --loglevel=WARN
+
+cd home/scrapy/tennisc/tennisc/spiders/ && scrapy runspider toei_spider.py --loglevel=WARN
+
+# つまずいたメモ
+- docker for windowsでbuildコマンド打つ時にはproxy設定が必要
+  - アプリの方でproxy設定しててもだめ
+- dockerfile内でCOPYコマンドを使用している時は、docker buildコマンド実行時のカレントディレクトリを気を付ける
+
+- pythonはインデント大事
+
+- ECSのサービスとタスク
+  - サービスはタスクの集まりみたいなもんだから、タスク数が下回ると維持しようと再起動する。
+  - バッチの処理であればタスク単体でok
+
+# postgreSQL master user
+  - tennisc_postgres
+  - eWYarUqe24G4
+
+# スライドで盛り込みたいこと
+- コンテナの勉強をしようと始めたが、pythonの勉強になってしまった
